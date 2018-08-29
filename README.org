@@ -1,0 +1,34 @@
+* Dropbox - syncing personal and business to local disk
+I.e., sync thackl@lim4.de (personal) and thackl@mit.edu (work) account to a
+local Dropbox/ folder.
+
+Officially not supported for Linux: https://www.dropbox.com/help/4238
+
+Workaround:
+http://www.dropboxwiki.com/forums-faq/running-multiple-instances-of-dropbox#Unix
+Bottom line: need to trick dropbox to use alternative home/
+
+Dropbox installs into `home/` and creates folder `Dropbox/`. To make things
+organized, this structure should work
+
+#+BEGIN_SRC 
+mkdir -p dropbox/accounts/private
+mkdir -p dropbox/accounts/MIT
+
+# login
+HOME=~/dropbox/accounts/private dropbox start -i
+HOME=~/dropbox/accounts/MIT dropbox start -i
+
+# create some links
+cd dropbox
+ln -s accounts/private/Dropbox private
+ln -s accounts/MIT/Dropbox\ \(MIT\) MIT
+
+# manual startup
+HOME=~/dropbox/accounts/private dropbox start
+HOME=~/dropbox/accounts/MIT dropbox start
+#+END_SRC
+
+For autostart, place the `dropboxd-accounts` script into `dropbox/`, make it executable
+(`chmod u+x`), and add it to `"Startup Applications" -> "Add" -> "path/to/dropboxd-accounts"`
+
